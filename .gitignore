@@ -1,4 +1,5 @@
 *.code-workspace
+headlines_site/public
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
