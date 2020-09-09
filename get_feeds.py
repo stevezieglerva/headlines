@@ -1,6 +1,7 @@
 import feedparser
 import json
 
+
 FEEDS = [
     "http://rss.cnn.com/rss/cnn_topstories.rss",
     "https://www.washingtontimes.com/rss/headlines/news/national/",
@@ -18,14 +19,16 @@ FEEDS = [
     "https://www.theepochtimes.com/c-us-features/feed",
 ]
 
+
 print("_________________")
 count = 0
 for feed in FEEDS:
     count = count + 1
     NewsFeed = feedparser.parse(feed)
-    # print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
-    title = NewsFeed.entries[0]["title"].replace(":", "-")
+    print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
+    title = NewsFeed.entries[0]["title"].replace(":", "-").replace("'", "")
     link = NewsFeed.entries[0]["link"]
+    published = NewsFeed.entries[0]["published"]
     image_url_front = ""
     image_url = ""
     if "media_content" in NewsFeed.entries[0]:
@@ -37,13 +40,74 @@ for feed in FEEDS:
 
     template = f"""---
 title: {title}
-date: '2015-07-28'
+date: {published}
 {image_url_front}
 target_link: {link}
+type: first_headline
+categories:
+    - first_headline
 ---
 {summary} """
-    with open(f"headlines_site/content/posts/{count}.md", "w") as file:
+    with open(f"headlines_site/content/first_headline/{count}.md", "w") as file:
         file.write(template)
 
-    print(entry)
+    title = NewsFeed.entries[1]["title"].replace(":", "-")
+    link = NewsFeed.entries[1]["link"]
+    published = NewsFeed.entries[1]["published"]
+    image_url_front = ""
+    image_url = ""
+    if "media_content" in NewsFeed.entries[1]:
+        image_url = NewsFeed.entries[1]["media_content"][0]["url"]
+        image_url_front = f"thumbnail: {image_url}"
+    summary = NewsFeed.entries[1]["summary"]
+    print(f"\n\n{feed}\n{title}\n\t{link}\n\t\t{image_url}")
+    entry = json.dumps(NewsFeed.entries[1], indent=3, default=str)
 
+    template = f"""---
+title: {title}
+date: {published}
+{image_url_front}
+target_link: {link}
+type: second_headline
+categories:
+    - second_headline
+---
+{summary} """
+    with open(f"headlines_site/content/second_headline/{count}.md", "w") as file:
+        file.write(template)
+
+
+print("_________________")
+count = 0
+for feed in [
+    "http://channels.feeddigest.com/rss/92907.xml",
+    "http://feeds.feedburner.com/breitbart?format=xml",
+    "https://www.wonkette.com/feeds/feed.rss",
+    "http://feeds.dailykosmedia.com/dailykosofficial",
+]:
+    NewsFeed = feedparser.parse(feed)
+    print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
+    for entry in NewsFeed.entries[0:2]:
+        count = count + 1
+        title = entry["title"].replace(":", "-").replace("'", "")
+        link = entry["link"]
+        published = entry["published"]
+        image_url_front = ""
+        image_url = ""
+        if "media_content" in entry:
+            image_url = entry["media_content"][0]["url"]
+            image_url_front = f"thumbnail: {image_url}"
+        summary = entry["summary"]
+        print(f"\n\n{feed}\n{title}\n\t{link}\n\t\t{image_url}")
+        template = f"""---
+title: {title}
+date: {published}
+{image_url_front}
+target_link: {link}
+type: fringe
+categories:
+    - fringe
+---
+    {summary} """
+        with open(f"headlines_site/content/fringe/{count}.md", "w") as file:
+            file.write(template)

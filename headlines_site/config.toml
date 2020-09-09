@@ -9,7 +9,7 @@ preserveTaxonomyNames = true
 footnotereturnlinkcontents = "↩"
 hasCJKLanguage = true
 enableEmoji = true
-paginate = 20
+paginate = 30
 
 [permalinks]
     post = "/post/:year/:month/:day/:slug/"
