@@ -23,12 +23,12 @@ paginate = 30
     url = "/about/"
     weight = 2
 [[menu.main]]
-    name = "Categories"
-    url = "/categories/"
+    name = "Second Headlines"
+    url = "/second_headline/"
     weight = 3
 [[menu.main]]
-    name = "Tags"
-    url = "/tags/"
+    name = "Fringe"
+    url = "/fringe/"
     weight = 4
 [[menu.main]]
     name = "Subscribe"
