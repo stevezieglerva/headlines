@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://onlineheadlines.net"
 languageCode = "en-us"
 title = "Headlines"
 theme = "hugo-xmag"
@@ -19,10 +19,6 @@ paginate = 30
     url = "/"
     weight = 1
 [[menu.main]]
-    name = "About"
-    url = "/about/"
-    weight = 2
-[[menu.main]]
     name = "Second Headlines"
     url = "/second_headline/"
     weight = 3
@@ -30,6 +26,10 @@ paginate = 30
     name = "Fringe"
     url = "/fringe/"
     weight = 4
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
 [[menu.main]]
     name = "Subscribe"
     url = "/index.xml"
@@ -41,6 +41,4 @@ paginate = 30
     footer = "&copy; [Steve Ziegler](https://yihui.name) 2017 | [Github](https://github.com/yihui) | [Twitter](https://twitter.com/xieyihui)"
 
 [params.text]
-    back = "&larr; Back to Home"
-    edit = "Edit this page &rarr;"
     truncated = "&hellip;"

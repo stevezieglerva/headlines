@@ -8,7 +8,7 @@
     {{ range $paginator.Pages }}
     <section class="article-list">
 
-      <h1><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+      <h1><a href="{{ .Params.target_link }}">{{ .Title }}</a></h1>
       <div class="date-author">
         {{ if .Params.author }}<span class="author">{{ partial "author_names.html" . }}</span> / {{ end }}
         <span class="date">{{ .Date.Format "2006-01-02" }}</span>
@@ -23,14 +23,14 @@
           <div class="thumbnail">{{ (print . " alt=\"Thumbnail\" />") | safeHTML }}</div>
           {{ end }}
           {{ end }}
-          <a class='target_link' href='{{ .Params.target_link}}'>Visit<a>
-              {{ with .Description }}
-              {{ $.Scratch.Set "summary" (markdownify .) }}
-              {{ else }}
-              {{ $.Scratch.Set "summary" ((delimit (findRE "(<p.*?>(.|\n)*?</p>\\s*)+" .Content) "[&hellip;] ") | plainify | truncate (default 200 .Site.Params.summary_length) (default " &hellip;" .Site.Params.text.truncated ) | replaceRE "&amp;" "&" | safeHTML) }}
-              {{ end }}
-              {{ $.Scratch.Get "summary" }}
-            </a>
+
+          {{ with .Description }}
+          {{ $.Scratch.Set "summary" (markdownify .) }}
+          {{ else }}
+          {{ $.Scratch.Set "summary" ((delimit (findRE "(<p.*?>(.|\n)*?</p>\\s*)+" .Content) "[&hellip;] ") | plainify | truncate (default 200 .Site.Params.summary_length) (default " &hellip;" .Site.Params.text.truncated ) | replaceRE "&amp;" "&" | safeHTML) }}
+          {{ end }}
+          {{ $.Scratch.Get "summary" }}
+
       </div>
     </section>
     {{ end }}

@@ -1,5 +1,23 @@
 import feedparser
 import json
+from datetime import datetime
+
+
+now = datetime.now().isoformat()
+about = f"""---
+title: "About"
+date: {now}
+draft: false
+---
+## Collection of top headlines for news site RSS feeds.
+
+This site is auto-generated from a mixed collection of RSS feeds from different newsites to provide a mixture of view points. 
+It grabs the [first](/first_headline) and [second](/second_headline) RSS entry from each feed. It also grabs some headlines from more [fringe](/fringe) websites.
+
+Generated: {now}
+"""
+with open(f"headlines_site/content/about.md", "w") as file:
+    file.write(about)
 
 
 FEEDS = [
@@ -25,17 +43,16 @@ count = 0
 for feed in FEEDS:
     count = count + 1
     NewsFeed = feedparser.parse(feed)
-    print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
     title = NewsFeed.entries[0]["title"].replace(":", "-").replace("'", "")
     link = NewsFeed.entries[0]["link"]
-    published = NewsFeed.entries[0]["published"]
+    published = NewsFeed.entries[0].get("published", "")
     image_url_front = ""
     image_url = ""
     if "media_content" in NewsFeed.entries[0]:
         image_url = NewsFeed.entries[0]["media_content"][0]["url"]
         image_url_front = f"thumbnail: {image_url}"
     summary = NewsFeed.entries[0]["summary"]
-    print(f"\n\n{feed}\n{title}\n\t{link}\n\t\t{image_url}")
+    print(f"\n\n{feed}\n{title}")
     entry = json.dumps(NewsFeed.entries[0], indent=3, default=str)
 
     template = f"""---
@@ -48,19 +65,20 @@ categories:
     - first_headline
 ---
 {summary} """
-    with open(f"headlines_site/content/first_headline/{count}.md", "w") as file:
+
+    with open(f"headlines_site/content/first_headline/{now}_{count}.md", "w") as file:
         file.write(template)
 
     title = NewsFeed.entries[1]["title"].replace(":", "-")
     link = NewsFeed.entries[1]["link"]
-    published = NewsFeed.entries[1]["published"]
+    published = NewsFeed.entries[1].get("published", "")
     image_url_front = ""
     image_url = ""
     if "media_content" in NewsFeed.entries[1]:
         image_url = NewsFeed.entries[1]["media_content"][0]["url"]
         image_url_front = f"thumbnail: {image_url}"
     summary = NewsFeed.entries[1]["summary"]
-    print(f"\n\n{feed}\n{title}\n\t{link}\n\t\t{image_url}")
+    print(f"\n\n{feed}\n{title}")
     entry = json.dumps(NewsFeed.entries[1], indent=3, default=str)
 
     template = f"""---
@@ -73,7 +91,7 @@ categories:
     - second_headline
 ---
 {summary} """
-    with open(f"headlines_site/content/second_headline/{count}.md", "w") as file:
+    with open(f"headlines_site/content/second_headline/{now}_{count}.md", "w") as file:
         file.write(template)
 
 
@@ -87,18 +105,18 @@ for feed in [
 ]:
     NewsFeed = feedparser.parse(feed)
     print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
-    for entry in NewsFeed.entries[0:2]:
+    for entry in NewsFeed.entries[0:3]:
         count = count + 1
         title = entry["title"].replace(":", "-").replace("'", "")
         link = entry["link"]
-        published = entry["published"]
+        published = entry.get("published", "")
         image_url_front = ""
         image_url = ""
         if "media_content" in entry:
             image_url = entry["media_content"][0]["url"]
             image_url_front = f"thumbnail: {image_url}"
         summary = entry["summary"]
-        print(f"\n\n{feed}\n{title}\n\t{link}\n\t\t{image_url}")
+        print(f"\n\n{feed}\n{title}")
         template = f"""---
 title: {title}
 date: {published}
@@ -109,5 +127,6 @@ categories:
     - fringe
 ---
     {summary} """
-        with open(f"headlines_site/content/fringe/{count}.md", "w") as file:
+        with open(f"headlines_site/content/fringe/{now}_{count}.md", "w") as file:
             file.write(template)
+
