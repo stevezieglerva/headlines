@@ -1,6 +1,10 @@
 *.code-workspace
 **/**/.DS_Store
 headlines_site/public
+headlines_site/content/first_headline/*.md
+headlines_site/content/second_headline/*.md
+headlines_site/content/fringe/*.md
+headlines_site/content/about.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
