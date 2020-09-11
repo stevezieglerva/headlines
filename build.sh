@@ -1,3 +1,7 @@
+echo "*** Running tests"
+python -m coverage run --source . -m unittest discover
+coverage report --include get_feeds.py
+
 
 echo "*** Removing old files ..."
 rm headlines_site/content/first_headline/*.*
@@ -10,12 +14,6 @@ python3 get_feeds.py
 
 echo "*** Building site ..."
 cd headlines_site
-
-timedatectl
-echo "Local Timestamp: $(date)"
-export TZ=America/New_York 
-sudo timedatectl set-timezone America/New_York
-echo "EST Timestamp: $(date)"
 hugo
 
 echo "*** Uploading site ..."
