@@ -87,19 +87,17 @@ def main():
     for feed in FEEDS:
         count = count + 1
         NewsFeed = feedparser.parse(feed)
-        entry = NewsFeed.entries[0]
-        md = convert_rss_data_to_md(entry, "first_headline")
-        with open(
-            f"headlines_site/content/first_headline/{now}_{count}.md", "w"
-        ) as file:
-            file.write(md)
-
-        entry = NewsFeed.entries[1]
-        md = convert_rss_data_to_md(entry, "second_headline")
-        with open(
-            f"headlines_site/content/second_headline/{now}_{count}.md", "w"
-        ) as file:
-            file.write(md)
+        first = True
+        for entry in NewsFeed.entries[0:2]:
+            content_type = "first_headline"
+            if not first:
+                content_type = "second_headline"
+            md = convert_rss_data_to_md(entry, content_type)
+            with open(
+                f"headlines_site/content/{content_type}/{now}_{count}.md", "w"
+            ) as file:
+                file.write(md)
+            first = False
 
     print("_________________")
     count = 0
@@ -113,28 +111,9 @@ def main():
 
         for entry in NewsFeed.entries[0:3]:
             count = count + 1
-            title = escape_field(entry["title"])
-            link = entry["link"]
-            published = entry.get("published", "")
-            image_url_front = ""
-            image_url = ""
-            if "media_content" in entry:
-                image_url = entry["media_content"][0]["url"]
-                image_url_front = f"thumbnail: {image_url}"
-            summary = entry["summary"]
-            print(f"\n\n{feed}\n{title}")
-            template = f"""---
-    title: "{title}"
-    date: {published}
-    {image_url_front}
-    target_link: {link}
-    type: fringe
-    categories:
-        - fringe
-    ---
-        {summary} """
+            md = convert_rss_data_to_md(entry, "fringe")
             with open(f"headlines_site/content/fringe/{now}_{count}.md", "w") as file:
-                file.write(template)
+                file.write(md)
 
 
 if __name__ == "__main__":
