@@ -10,7 +10,7 @@ This should help eliminate articles like that.
 It's published at [https://onlineheadlines.net](https://onlineheadlines.net).
 
 ## Tech Stack
-* [Python script](get_feeds.py) to create markdown content files
+* [Python script](get_feeds.py#L57) to create markdown content files
 * Hugo static site generator using the [hugo-xmag](https://themes.gohugo.io/hugo-xmag/) theme to give it a newspaper feel
 * Docker [container](Dockerfile) to run the [build](build.sh)
 * AWS ECS to run the container every hour
