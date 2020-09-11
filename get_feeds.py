@@ -1,6 +1,12 @@
 import feedparser
 import json
+import re
 from datetime import datetime
+
+
+def escape_field(text):
+    text = text.replace('"', '\\"')
+    return text
 
 
 now = datetime.now().isoformat()
@@ -43,7 +49,7 @@ count = 0
 for feed in FEEDS:
     count = count + 1
     NewsFeed = feedparser.parse(feed)
-    title = NewsFeed.entries[0]["title"].replace(":", "-").replace("'", "")
+    title = escape_field(NewsFeed.entries[0]["title"])
     link = NewsFeed.entries[0]["link"]
     published = NewsFeed.entries[0].get("published", "")
     image_url_front = ""
@@ -56,7 +62,7 @@ for feed in FEEDS:
     entry = json.dumps(NewsFeed.entries[0], indent=3, default=str)
 
     template = f"""---
-title: {title}
+title: "{title}"
 date: {published}
 {image_url_front}
 target_link: {link}
@@ -68,8 +74,8 @@ categories:
 
     with open(f"headlines_site/content/first_headline/{now}_{count}.md", "w") as file:
         file.write(template)
+    title = escape_field(NewsFeed.entries[1]["title"])
 
-    title = NewsFeed.entries[1]["title"].replace(":", "-")
     link = NewsFeed.entries[1]["link"]
     published = NewsFeed.entries[1].get("published", "")
     image_url_front = ""
@@ -82,7 +88,7 @@ categories:
     entry = json.dumps(NewsFeed.entries[1], indent=3, default=str)
 
     template = f"""---
-title: {title}
+title: "{title}"
 date: {published}
 {image_url_front}
 target_link: {link}
@@ -104,10 +110,10 @@ for feed in [
     "http://feeds.dailykosmedia.com/dailykosofficial",
 ]:
     NewsFeed = feedparser.parse(feed)
-    print(json.dumps(NewsFeed.entries[0], indent=3, default=str))
+
     for entry in NewsFeed.entries[0:3]:
         count = count + 1
-        title = entry["title"].replace(":", "-").replace("'", "")
+        title = escape_field(NewsFeed.entries[1]["title"])
         link = entry["link"]
         published = entry.get("published", "")
         image_url_front = ""
@@ -118,7 +124,7 @@ for feed in [
         summary = entry["summary"]
         print(f"\n\n{feed}\n{title}")
         template = f"""---
-title: {title}
+title: "{title}"
 date: {published}
 {image_url_front}
 target_link: {link}

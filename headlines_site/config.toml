@@ -2,7 +2,7 @@ baseurl = "https://onlineheadlines.net"
 languageCode = "en-us"
 title = "Headlines"
 theme = "hugo-xmag"
-googleAnalytics = ""
+googleAnalytics = "UA-177767171-1"
 disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 preserveTaxonomyNames = true
@@ -10,6 +10,8 @@ footnotereturnlinkcontents = "↩"
 hasCJKLanguage = true
 enableEmoji = true
 paginate = 30
+
+
 
 [permalinks]
     post = "/post/:year/:month/:day/:slug/"
@@ -21,15 +23,15 @@ paginate = 30
 [[menu.main]]
     name = "Second Headlines"
     url = "/second_headline/"
-    weight = 3
+    weight = 2
 [[menu.main]]
     name = "Fringe"
     url = "/fringe/"
-    weight = 4
+    weight = 3
 [[menu.main]]
     name = "About"
     url = "/about/"
-    weight = 2
+    weight = 4
 [[menu.main]]
     name = "Subscribe"
     url = "/index.xml"
@@ -38,7 +40,9 @@ paginate = 30
     description = "A website built through Hugo and blogdown."
     summary_length = 300
     github_edit = "https://github.com/yihui/hugo-xmag/edit/master/exampleSite/content/"
-    footer = "&copy; [Steve Ziegler](https://yihui.name) 2017 | [Github](https://github.com/yihui) | [Twitter](https://twitter.com/xieyihui)"
+    footer = "&copy; [Steve Ziegler](http://nerdthoughts.net) | [Github](https://github.com/stevezieglerva) | [Twitter](https://twitter.com/stevezieglerva)"
 
 [params.text]
     truncated = "&hellip;"
+
+

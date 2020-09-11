@@ -10,6 +10,12 @@ python3 get_feeds.py
 
 echo "*** Building site ..."
 cd headlines_site
+
+timedatectl
+echo "Local Timestamp: $(date)"
+export TZ=America/New_York 
+sudo timedatectl set-timezone America/New_York
+echo "EST Timestamp: $(date)"
 hugo
 
 echo "*** Uploading site ..."

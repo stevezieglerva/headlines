@@ -1,0 +1,12 @@
+{
+    "launchType": "FARGATE",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-06f883ab7bf821eff"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    },
+    "taskDefinition": "headlines"
+}

@@ -33,7 +33,7 @@
       {{ end }}
       {{ else }}
       <span>{{ $.Scratch.Get "Title" }}</span>
-      <span>{{ now.Format "Monday, January 2, 2006" }}</span>
+      <span>{{ now.Format "Monday, January 2, 2006 15:04" }}</span>
       {{ $pages := .Pages }}
       {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
       {{ $paginator := .Paginate (where $pages "Section" "!=" "") }}
