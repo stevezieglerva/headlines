@@ -1,8 +1,3 @@
-import sys
-
-print(sys.executable)
-print("\n".join(sys.path))
-
 import feedparser
 import json
 import re
