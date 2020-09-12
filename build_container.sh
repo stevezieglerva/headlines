@@ -15,8 +15,6 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 docker tag ziegler-headings-build:latest $ACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/ziegler-headings-build:latest
 docker push $ACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/ziegler-headings-build:latest
 
-
-
 # Run the task as a test
 aws ecs run-task --cli-input-json file://run_task_input.json
  

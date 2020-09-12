@@ -5,6 +5,7 @@ headlines_site/content/first_headline/*.md
 headlines_site/content/second_headline/*.md
 headlines_site/content/fringe/*.md
 headlines_site/content/about.md
+run_task_input.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

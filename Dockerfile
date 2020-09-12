@@ -28,5 +28,4 @@ RUN pip install -r requirements.txt
 
 RUN chmod +x build.sh
 
-
 CMD /build.sh
