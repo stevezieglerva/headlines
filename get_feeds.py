@@ -278,7 +278,7 @@ def ngrams(input, n):
 
 
 def get_top_gram(headlines: list, gram_length: int):
-    top_gram = TopX(1)
+    top_gram = TopX(3)
     counts_gram1 = {}
     for i in headlines:
         results = ngrams(i, gram_length)
@@ -289,7 +289,16 @@ def get_top_gram(headlines: list, gram_length: int):
     for k, v in counts_gram1.items():
         item = (v, k)
         top_gram.add(item)
-    return top_gram.values[0]
+
+    best_gram = top_gram.values[0]
+    top_frequency = top_gram.values[0][0]
+    ties = [gram for gram in top_gram.values if gram[0] == top_frequency]
+    if len(ties) > 1:
+        ties.sort(key=lambda x: x[1])
+        print(f"Ties: {ties}")
+        best_gram = ties[0]
+
+    return best_gram
 
 
 def get_best_keywords(headlines: list):
