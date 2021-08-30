@@ -199,74 +199,6 @@ class TopX:
         self.values = heapq.nlargest(self.__topn, self.values)
 
 
-def escape_field(text):
-    text = text.replace('"', '\\"')
-    return text
-
-
-def get_thumbnail_url(rss_entry):
-    image_url_front = ""
-    image_url = ""
-    if "media_content" in rss_entry:
-        image_url = rss_entry["media_content"][0]["url"]
-        image_url_front = f"thumbnail: {image_url}"
-    return image_url_front
-
-
-def convert_rss_data_to_md(rss_entry, content_type):
-    title = escape_field(rss_entry["title"])
-    link = rss_entry["link"]
-    published = rss_entry.get("published", "")
-    image_url_front = get_thumbnail_url(rss_entry)
-    summary = rss_entry["summary"]
-    print(f"\n\n{title}")
-    template = f"""---
-title: "{title}"
-date: {published}
-{image_url_front}
-target_link: {link}
-type: {content_type}
-categories:
-    - {content_type}
----
-{summary}"""
-    return template
-
-
-def get_about_file_md(tmsp_datetime):
-    now = tmsp_datetime.isoformat()
-    about = f"""---
-title: "About"
-date: {now}
-draft: false
----
-## Collection of top headlines for news site RSS feeds.
-
-This site is auto-generated from a mixed collection of RSS feeds from different newsites to provide a mixture of view points. 
-It grabs the [first](/first_headline) and [second](/second_headline) RSS entry from each feed. It also grabs some headlines from more [fringe](/fringe) websites.
-
-Generated: {now}"""
-    return about
-
-
-def get_lead_headlines_md(tmsp_datetime: datetime, topic: str, lead_headlines: list):
-    now = tmsp_datetime.isoformat()
-    headlines_list = [f"* {h}" for h in lead_headlines]
-    headlines_str = "\n".join(headlines_list)
-    md = f"""---
-title: "Lead Headlines"
-date: {now}
-draft: false
----
-## Lead headlines for '{topic}':
-{headlines_str}
-
-
-
-Generated: {now}"""
-    return md
-
-
 class LeadHeadlines:
     def __init__(self, headlines: List[str]) -> None:
         self.prep_to_raw_mapping = self.__prep_data(headlines)
@@ -346,7 +278,7 @@ lead_headlines: {self.lead_headlines}
         if top_gram2[0] >= top_gram1[0]:
             return top_gram2[1]
 
-        if top_gram1[1] in top_gram2[1]:
+        if top_gram1[1] in top_gram2[1] and top_gram2[0] > 1:
             return top_gram2[1]
         return top_gram1[1]
 
@@ -361,6 +293,76 @@ lead_headlines: {self.lead_headlines}
             for prepped, raw in self.prep_to_raw_mapping.items()
             if self.best_keywords in prepped
         ]
+
+
+def escape_field(text):
+    text = text.replace('"', '\\"')
+    return text
+
+
+def get_thumbnail_url(rss_entry):
+    image_url_front = ""
+    image_url = ""
+    if "media_content" in rss_entry:
+        image_url = rss_entry["media_content"][0]["url"]
+        image_url_front = f"thumbnail: {image_url}"
+    return image_url_front
+
+
+def convert_rss_data_to_md(rss_entry, content_type):
+    title = escape_field(rss_entry["title"])
+    link = rss_entry["link"]
+    published = rss_entry.get("published", "")
+    image_url_front = get_thumbnail_url(rss_entry)
+    summary = rss_entry["summary"]
+    print(f"\n\n{title}")
+    template = f"""---
+title: "{title}"
+date: {published}
+{image_url_front}
+target_link: {link}
+type: {content_type}
+categories:
+    - {content_type}
+---
+{summary}"""
+    return template
+
+
+def get_about_file_md(tmsp_datetime):
+    now = tmsp_datetime.isoformat()
+    about = f"""---
+title: "About"
+date: {now}
+draft: false
+---
+## Collection of top headlines for news site RSS feeds.
+
+This site is auto-generated from a mixed collection of RSS feeds from different newsites to provide a mixture of view points. 
+It grabs the [first](/first_headline) and [second](/second_headline) RSS entry from each feed. It also grabs some headlines from more [fringe](/fringe) websites.
+
+Generated: {now}"""
+    return about
+
+
+def get_lead_headlines_md(tmsp_datetime: datetime, leads: LeadHeadlines):
+    topic = leads.best_keywords
+    lead_headlines = leads.lead_headlines
+    now = tmsp_datetime.isoformat()
+    headlines_list = [f"* {h}" for h in lead_headlines]
+    headlines_str = "\n".join(headlines_list)
+    md = f"""---
+title: "Lead Headlines"
+date: {now}
+draft: false
+---
+## Lead headlines for '{topic}':
+{headlines_str}
+
+
+
+Generated: {now}"""
+    return md
 
 
 def main():
@@ -421,12 +423,9 @@ def main():
             with open(f"headlines_site/content/fringe/{now}_{count}.md", "w") as file:
                 file.write(md)
 
-    best_keywords = get_best_keywords(all_headlines)
-    lead_headlines = get_lead_headlines(all_headlines)
-    print(f"\nLead headlines: {lead_headlines}")
-    lead_headline_md = get_lead_headlines_md(
-        datetime.now(), best_keywords, lead_headlines
-    )
+    leads = LeadHeadlines(all_headlines)
+    print(f"\nLead headlines: {leads.lead_headlines}")
+    lead_headline_md = get_lead_headlines_md(datetime.now(), leads)
     with open(f"headlines_site/content/lead_headlines.md", "w") as file:
         file.write(lead_headline_md)
 

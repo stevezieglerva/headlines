@@ -318,17 +318,16 @@ Generated: 2020-01-01T13:04:05"""
 
     def test_get_lead_headlines_md__given_headlines__then_md_is_correct(self):
         # Arrange
+        leads = LeadHeadlines(
+            ["Hurricante Ida is really bad", "Who is impacted by Hurricane Ida."]
+        )
 
         # Act
-        results = get_lead_headlines_md(
-            datetime.now(),
-            "hurricane ida",
-            ["Hurricante Ida is really bad", "Who is impacted by Hurricane Ida."],
-        )
+        results = get_lead_headlines_md(datetime.now(), leads)
         print(f"test results: {results}")
 
         # Assert
-        self.assertTrue("Lead headlines for 'hurricane ida'" in results)
+        self.assertTrue("Lead headlines for 'ida'" in results)
 
 
 if __name__ == "__main__":
