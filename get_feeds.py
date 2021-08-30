@@ -290,8 +290,9 @@ lead_headlines: {self.lead_headlines}
             input_list = raw_headline.split(" ")
             input_list_lower = [w.lower() for w in input_list]
             input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
+            input_no_possessives = [w.replace("'s", "") for w in input_no_stop_words]
             input_no_punc = [
-                re.sub(r"[^a-zA-Z0-9 -']", " ", w) for w in input_no_stop_words
+                re.sub(r"[^a-zA-Z0-9 -']", " ", w) for w in input_no_possessives
             ]
             input_trim = [w.strip() for w in input_no_punc]
             input_line = " ".join(input_trim)
@@ -343,6 +344,9 @@ lead_headlines: {self.lead_headlines}
             print("returning 3")
             return top_gram3[1]
         if top_gram2[0] >= top_gram1[0]:
+            return top_gram2[1]
+
+        if top_gram1[1] in top_gram2[1]:
             return top_gram2[1]
         return top_gram1[1]
 
