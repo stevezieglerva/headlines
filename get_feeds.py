@@ -179,6 +179,8 @@ STOP_WORDS = [
     "yours",
     "yourself",
     "yourselves",
+    "new",
+    "weeks",
 ]
 
 
@@ -264,73 +266,70 @@ Generated: {now}"""
     return md
 
 
-def ngrams(input, n):
-    input_list = input.split(" ")
-    input_list_lower = [w.lower() for w in input_list]
-    input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
-    input_no_punc = [re.sub(r"[^a-zA-Z0-9 -]", " ", w) for w in input_no_stop_words]
-    input_trim = [w.strip() for w in input_no_punc]
-    input_to_process = input_trim
-    output = []
-    for i in range(len(input_to_process) - n + 1):
-        output.append(input_to_process[i : i + n])
-    return [" ".join(x) for x in output]
+class LeadHeadlines:
+    def __init__(self, headlines: list) -> None:
+        self.lead_headlines = self.__get_lead_headlines(headlines)
 
+    def __ngrams(self, input, n):
+        input_list = input.split(" ")
+        input_list_lower = [w.lower() for w in input_list]
+        input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
+        input_no_punc = [re.sub(r"[^a-zA-Z0-9 -]", " ", w) for w in input_no_stop_words]
+        input_trim = [w.strip() for w in input_no_punc]
+        input_to_process = input_trim
+        output = []
+        for i in range(len(input_to_process) - n + 1):
+            output.append(input_to_process[i : i + n])
+        return [" ".join(x) for x in output]
 
-def get_top_gram(headlines: list, gram_length: int):
-    top_gram = TopX(3)
-    counts_gram1 = {}
-    for i in headlines:
-        results = ngrams(i, gram_length)
-        for gram in results:
-            # print(f"\t{gram}")
-            counts_gram1[gram] = counts_gram1.get(gram, 0) + 1
+    def __get_top_gram(self, headlines: list, gram_length: int):
+        top_gram = TopX(3)
+        counts_gram1 = {}
+        for i in headlines:
+            results = self.__ngrams(i, gram_length)
+            for gram in results:
+                # print(f"\t{gram}")
+                counts_gram1[gram] = counts_gram1.get(gram, 0) + 1
 
-    for k, v in counts_gram1.items():
-        item = (v, k)
-        top_gram.add(item)
+        for k, v in counts_gram1.items():
+            item = (v, k)
+            top_gram.add(item)
 
-    best_gram = top_gram.values[0]
-    top_frequency = top_gram.values[0][0]
-    ties = [gram for gram in top_gram.values if gram[0] == top_frequency]
-    if len(ties) > 1:
-        ties.sort(key=lambda x: x[1])
-        print(f"Ties: {ties}")
-        best_gram = ties[0]
+        best_gram = top_gram.values[0]
+        top_frequency = top_gram.values[0][0]
+        ties = [gram for gram in top_gram.values if gram[0] == top_frequency]
+        if len(ties) > 1:
+            ties.sort(key=lambda x: x[1])
+            print(f"Ties: {ties}")
+            best_gram = ties[0]
 
-    return best_gram
+        return best_gram
 
+    def __get_best_keywords(self, headlines: list):
+        top_gram1 = self.__get_top_gram(headlines, 1)
+        top_gram2 = self.__get_top_gram(headlines, 2)
+        top_gram3 = self.__get_top_gram(headlines, 3)
 
-def get_best_keywords(headlines: list):
-    # top_gram1 = get_top_gram(headlines, 1)
-    top_gram2 = get_top_gram(headlines, 2)
-    top_gram3 = get_top_gram(headlines, 3)
+        top_all = TopX(1)
+        top_all.add(top_gram1)
+        top_all.add(top_gram2)
+        top_all.add(top_gram3)
 
-    top_all = TopX(1)
-    # top_all.add(top_gram1)
-    top_all.add(top_gram2)
-    top_all.add(top_gram3)
+        print(top_gram1)
+        print(top_gram2)
+        print(top_gram3)
 
-    # print(top_gram1)
-    print(top_gram2)
-    print(top_gram3)
+        if top_gram3[0] >= top_gram2[0] and top_gram3[0] >= top_gram1[0]:
+            print("returning 3")
+            return top_gram3[1]
+        if top_gram2[0] >= top_gram1[0]:
+            return top_gram2[1]
+        return top_gram1[1]
 
-    # print(f"\n\nBest of all: {top_all.values[0]}")
-    # if top_gram3[0] >= top_gram2[0] or top_gram3[0] >= top_gram1[0]:
-    #     return top_gram3[1]
-    # if top_gram2[0] >= top_gram1[0] or top_gram2[0] >= top_gram1[0]:
-    #     return top_gram2[1]
-    # return top_gram1[1]
-
-    print(f"\n\nBest of all: {top_all.values[0]}")
-    if top_gram3[0] >= top_gram2[0]:
-        return top_gram3[1]
-    return top_gram2[1]
-
-
-def get_lead_headlines(headlines: list):
-    best_keyword = get_best_keywords(headlines)
-    return [h for h in headlines if best_keyword in h.lower()]
+    def __get_lead_headlines(self, headlines: list):
+        self.best_keyword = self.__get_best_keywords(headlines)
+        print(f"best_keyword: {best_keyword}")
+        return [h for h in headlines if best_keyword in h.lower()]
 
 
 def main():
