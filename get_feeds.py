@@ -293,25 +293,30 @@ def get_top_gram(headlines: list, gram_length: int):
 
 
 def get_best_keywords(headlines: list):
-    top_gram1 = get_top_gram(headlines, 1)
+    # top_gram1 = get_top_gram(headlines, 1)
     top_gram2 = get_top_gram(headlines, 2)
     top_gram3 = get_top_gram(headlines, 3)
 
     top_all = TopX(1)
-    top_all.add(top_gram1)
+    # top_all.add(top_gram1)
     top_all.add(top_gram2)
     top_all.add(top_gram3)
 
-    print(top_gram1)
+    # print(top_gram1)
     print(top_gram2)
     print(top_gram3)
 
+    # print(f"\n\nBest of all: {top_all.values[0]}")
+    # if top_gram3[0] >= top_gram2[0] or top_gram3[0] >= top_gram1[0]:
+    #     return top_gram3[1]
+    # if top_gram2[0] >= top_gram1[0] or top_gram2[0] >= top_gram1[0]:
+    #     return top_gram2[1]
+    # return top_gram1[1]
+
     print(f"\n\nBest of all: {top_all.values[0]}")
-    if top_gram3[0] >= top_gram2[0] or top_gram3[0] >= top_gram1[0]:
+    if top_gram3[0] >= top_gram2[0]:
         return top_gram3[1]
-    if top_gram2[0] >= top_gram1[0] or top_gram2[0] >= top_gram1[0]:
-        return top_gram2[1]
-    return top_gram1[1]
+    return top_gram2[1]
 
 
 def get_lead_headlines(headlines: list):
