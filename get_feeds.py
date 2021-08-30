@@ -291,7 +291,7 @@ lead_headlines: {self.lead_headlines}
             input_list_lower = [w.lower() for w in input_list]
             input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
             input_no_punc = [
-                re.sub(r"[^a-zA-Z0-9 -]", " ", w) for w in input_no_stop_words
+                re.sub(r"[^a-zA-Z0-9 -']", " ", w) for w in input_no_stop_words
             ]
             input_trim = [w.strip() for w in input_no_punc]
             input_line = " ".join(input_trim)

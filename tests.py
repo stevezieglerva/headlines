@@ -216,139 +216,94 @@ class UnitTests(unittest.TestCase):
             ['Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power', 'Millions lost power to Ida the now tropical.'],
         )
 
-    # def test_get_best_keywords__given_other_headlines__then_best_returned(self):
-    #     # Arrange
-    #     input = [
-    #         "Families forced to queue for hours at Heathrow border control",
-    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
-    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
-    #         "In New Orleans and beyond, evacuations are underway.",
-    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-    #         "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
-    #         "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
-    #     ]
+    def test_get_best_keywords__given_other_headlines__then_best_returned(self):
+        # Arrange
+        input = [
+            "Families forced to queue for hours at Heathrow border control",
+            "Canada election: Will declining consumer confidence hurt Trudeau?",
+            "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
+            "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
+            "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+            "Haiti Quake Turned Baptism Celebration Into Tragedy",
+            "In New Orleans and beyond, evacuations are underway.",
+            "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
+            "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
+            "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+            "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
+            "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
+        ]
 
-    #     # Act
-    #     results = get_best_keywords(input)
+        # Act
+        subject = LeadHeadlines(input)
+        print(subject)
 
-    #     # Assert
-    #     self.assertEqual(results, "lake tahoe")
+        # Assert
+        self.assertEqual(subject.best_keywords, "lake tahoe")
+        self.assertEqual(
+            subject.lead_headlines,
+            ['As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave', 'Raging California wildfire threatens Lake Tahoe, prompts evacuations'])
 
-    # def test_get_best_keywords__given_tie_in_headlines__then_lowest_alpha_returned(
-    #     self,
-    # ):
-    #     # Arrange
-    #     input = [
-    #         "hurricane ida slams lousiana",
-    #         "hurricane ida",
-    #         "covid surge",
-    #         "covid surge hitting the south",
-    #     ]
 
-    #     # Act
-    #     results = get_best_keywords(input)
 
-    #     # Assert
-    #     self.assertEqual(results, "covid surge")
+    def test_get_lead_headlines__given_google_headlines__then_best_returned(self):
+        # Arrange
+        input = [
+            "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
+            "Ida pummels Louisiana: Live updates",
+            "New Orleans Without Power As Ida Moves North",
+            "WATCH LIVE: Non-stop coverage of Ida’s aftermath in Louisiana",
+            "Ida: At least 1 dead, more than a million customers without power in Louisiana",
+            "US intercepts rockets targeting Kabul airport as key diplomats fly out",
+            "As many as 5 rockets were fired on Kabul airport, says US official",
+            "Unvaccinated U.S. Visitors Could Face New Restrictions on Travel to Europe",
+            "EU to recommend reinstating Covid-related travel restrictions on US, reports say",
+            "Hospital patients are being evacuated as the rapidly growing Caldor Fire edges closer to California's Lake Tahoe region",
+            "South Lake Tahoe Wildfire: California Side's Residents Warned To Leave",
+            "Taliban offered Kabul to U.S., but Americans said no: report",
+            "The Tale of California’s Recall Election",
+            "Why Aren’t Democrats Talking About the Worst Possible Outcome of the California Recall?",
+            "New COVID variant detected in South Africa, most mutated variant so far",
+            "New South African COVID-19 strain is the most mutated one yet: report",
+            "Ed Asner, Emmy-Winning Star of ‘Lou Grant’ and ‘Up,’ Dies at 91",
+            "Ed Asner, acclaimed 'Mary Tyler Moore Show' actor, dies at 91",
+            "Vaccine Refusers Don't Get to Dictate Terms Anymore",
+            "Hurricane Ida Reversed the Course of the Mississippi River",
+            "Hurricane Ida knocks out power in all of New Orleans | DW News",
+            "Sirhan Sirhan: Robert Kennedy’s oldest son condemns killer’s possible parole",
+            "Chad Daybell's children defend their father, say he was 'framed'",
+            "Sneak peek: The Secrets of Chad Daybell's Backyard",
+            "Critics slam WaPo column for blaming crisis in Afghanistan on American people",
+            "McConnell: ‘Why we went’ to Afghanistan has been lost",
+            "Israel doubles down on booster shots as daily Covid cases set new record",
+            "This is how to prevent another 100,000 Covid deaths by December, Fauci says",
+            "After death threats from a far-right group, Russian restaurant pulls ad featuring Black man",
+            "Border policeman dies from Gaza riot shooting injury",
+            "Coronavirus booster shots 'not a luxury', WHO Europe head says",
+            "The Taliban's education minister says it will allow Afghan women to attend university, but mixed gender classes will be banned",
+            "Afghanistan: UK sceptical of Taliban safe passage pledge, says minister",
+            "NC Coronavirus update August 30: Wake County Public School System updates COVID 19 protocols as cases increase in NC",
+            "Durham mayor says city is ready to welcome Afghan refugees",
+            "What is Theranos founder Elizabeth Holmes on trial for?",
+            "Treasury yields fall slightly as investors await key jobs report",
+            "Boeing 777s, which had engine blow apart after takeoff, grounded until 2022",
+            "Gas prices dodge Hurricane Ida catastrophe",
+            "Ida closes Colonial Pipeline, gas prices expected to rise",
+            "Galaxy S10, Galaxy S20, Galaxy Note 10, and Galaxy Note 20 get One UI 3.1.1 updates",
+            "One UI 4 allegedly draws near with the sighting of a Galaxy S21 Ultra on new software",
+            "Notebookcheck.net",
+            "Steve Cohen weighs in on Mets’ ‘thumbs-down’ gestures",
+            "Mets fans booed their team during its freefall, and now the players are returning the favor",
+        ]
 
-    # def test_get_lead_headlines__given_other_headlines__then_best_returned(self):
-    #     # Arrange
-    #     input = [
-    #         "Families forced to queue for hours at Heathrow border control",
-    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
-    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
-    #         "In New Orleans and beyond, evacuations are underway.",
-    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-    #         "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
-    #         "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
-    #     ]
+        # Act
+        subject = LeadHeadlines(input)
+        print(subject)
 
-    #     # Act
-    #     results = get_lead_headlines(input)
-    #     print(results)
-
-    #     # Assert
-    #     self.assertEqual(
-    #         results,
-    #         [
-    #             "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-    #             "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-    #         ],
-    #     )
-
-    # def test_get_lead_headlines__given_google_headlines__then_best_returned(self):
-    #     # Arrange
-    #     input = [
-    #         "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
-    #         "Ida pummels Louisiana: Live updates",
-    #         "New Orleans Without Power As Ida Moves North",
-    #         "WATCH LIVE: Non-stop coverage of Ida’s aftermath in Louisiana",
-    #         "Ida: At least 1 dead, more than a million customers without power in Louisiana",
-    #         "US intercepts rockets targeting Kabul airport as key diplomats fly out",
-    #         "As many as 5 rockets were fired on Kabul airport, says US official",
-    #         "Unvaccinated U.S. Visitors Could Face New Restrictions on Travel to Europe",
-    #         "EU to recommend reinstating Covid-related travel restrictions on US, reports say",
-    #         "Hospital patients are being evacuated as the rapidly growing Caldor Fire edges closer to California's Lake Tahoe region",
-    #         "South Lake Tahoe Wildfire: California Side's Residents Warned To Leave",
-    #         "Taliban offered Kabul to U.S., but Americans said no: report",
-    #         "The Tale of California’s Recall Election",
-    #         "Why Aren’t Democrats Talking About the Worst Possible Outcome of the California Recall?",
-    #         "New COVID variant detected in South Africa, most mutated variant so far",
-    #         "New South African COVID-19 strain is the most mutated one yet: report",
-    #         "Ed Asner, Emmy-Winning Star of ‘Lou Grant’ and ‘Up,’ Dies at 91",
-    #         "Ed Asner, acclaimed 'Mary Tyler Moore Show' actor, dies at 91",
-    #         "Vaccine Refusers Don't Get to Dictate Terms Anymore",
-    #         "Hurricane Ida Reversed the Course of the Mississippi River",
-    #         "Hurricane Ida knocks out power in all of New Orleans | DW News",
-    #         "Sirhan Sirhan: Robert Kennedy’s oldest son condemns killer’s possible parole",
-    #         "Chad Daybell's children defend their father, say he was 'framed'",
-    #         "Sneak peek: The Secrets of Chad Daybell's Backyard",
-    #         "Critics slam WaPo column for blaming crisis in Afghanistan on American people",
-    #         "McConnell: ‘Why we went’ to Afghanistan has been lost",
-    #         "Israel doubles down on booster shots as daily Covid cases set new record",
-    #         "This is how to prevent another 100,000 Covid deaths by December, Fauci says",
-    #         "After death threats from a far-right group, Russian restaurant pulls ad featuring Black man",
-    #         "Border policeman dies from Gaza riot shooting injury",
-    #         "Coronavirus booster shots 'not a luxury', WHO Europe head says",
-    #         "The Taliban's education minister says it will allow Afghan women to attend university, but mixed gender classes will be banned",
-    #         "Afghanistan: UK sceptical of Taliban safe passage pledge, says minister",
-    #         "NC Coronavirus update August 30: Wake County Public School System updates COVID 19 protocols as cases increase in NC",
-    #         "Durham mayor says city is ready to welcome Afghan refugees",
-    #         "What is Theranos founder Elizabeth Holmes on trial for?",
-    #         "Treasury yields fall slightly as investors await key jobs report",
-    #         "Boeing 777s, which had engine blow apart after takeoff, grounded until 2022",
-    #         "Gas prices dodge Hurricane Ida catastrophe",
-    #         "Ida closes Colonial Pipeline, gas prices expected to rise",
-    #         "Galaxy S10, Galaxy S20, Galaxy Note 10, and Galaxy Note 20 get One UI 3.1.1 updates",
-    #         "One UI 4 allegedly draws near with the sighting of a Galaxy S21 Ultra on new software",
-    #         "Notebookcheck.net",
-    #         "Steve Cohen weighs in on Mets’ ‘thumbs-down’ gestures",
-    #         "Mets fans booed their team during its freefall, and now the players are returning the favor",
-    #     ]
-
-    #     # Act
-    #     results = get_lead_headlines(input)
-    #     print(results)
-
-    #     # Assert
-    #     self.assertEqual(
-    #         results,
-    #         [
-    #             "Hurricane Ida Reversed the Course of the Mississippi River",
-    #             "Hurricane Ida knocks out power in all of New Orleans | DW News",
-    #             "Gas prices dodge Hurricane Ida catastrophe",
-    #         ],
-    #     )
+        # Assert
+        self.assertEqual(subject.best_keywords, "ida")
+        self.assertEqual(
+            subject.lead_headlines,
+            ['At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana', 'Ida pummels Louisiana: Live updates', 'New Orleans Without Power As Ida Moves North', 'WATCH LIVE: Non-stop coverage of Ida’s aftermath in Louisiana', 'Ida: At least 1 dead, more than a million customers without power in Louisiana', 'Hurricane Ida Reversed the Course of the Mississippi River', 'Hurricane Ida knocks out power in all of New Orleans | DW News', 'Gas prices dodge Hurricane Ida catastrophe', 'Ida closes Colonial Pipeline, gas prices expected to rise']  )
 
     # def test_get_lead_headlines_md__given_headlines__then_md_is_correct(self):
     #     # Arrange
