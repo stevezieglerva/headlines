@@ -115,7 +115,7 @@ It grabs the [first](/first_headline) and [second](/second_headline) RSS entry f
 Generated: 2020-01-01T13:04:05"""
         self.assertEqual(results, expected)
 
-    def test_get_top_gram__given_no_tie__then_highest_returned(self):
+    def test_get_lead_headlines__given_no_tie__then_highest_returned(self):
         # Arrange
         input = [
             "hurricane ida slams lousiana",
@@ -124,134 +124,159 @@ Generated: 2020-01-01T13:04:05"""
         ]
 
         # Act
-        results = get_top_gram(input, 2)
+        subject = LeadHeadlines(input)
 
         # Assert
-        self.assertEqual(results, (2, "hurricane ida"))
-
-    def test_get_top_gram__given_tie__then_highest_returned(self):
-        # Arrange
-        input = [
-            "hurricane ida slams lousiana",
-            "hurricane ida",
-            "covid surge",
-            "covid surge hitting the south",
-        ]
-
-        # Act
-        results = get_top_gram(input, 2)
-
-        # Assert
-        self.assertEqual(results, (2, "covid surge"))
-
-    def test_ngrams__given_headline__then_ngrams_returned_without_stop_words_and_punctuation(
-        self,
-    ):
-        # Arrange
-        input = "Hurricane Ida has really strong winds!"
-
-        # Act
-        results = ngrams(input, 3)
-        print(results)
-
-        # Assert
+        self.assertEqual(subject.best_keywords, "hurricane ida")
         self.assertEqual(
-            results,
-            ["hurricane ida really", "ida really strong", "really strong winds"],
+            subject.lead_headlines, ["hurricane ida slams lousiana", "hurricane ida"]
         )
 
-    def test_get_best_keywords__given_headlines__then_best_returned(self):
-        # Arrange
-        input = [
-            "Families forced to queue for hours at Heathrow border control",
-            "Canada election: Will declining consumer confidence hurt Trudeau?",
-            "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-            "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-            "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-            "Haiti Quake Turned Baptism Celebration Into Tragedy",
-            "In New Orleans and beyond, evacuations are underway.",
-            "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-            "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-            "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-            "Ida now a tropical storm",
-            "Ida now a tropical storm",
-        ]
-
-        # Act
-        results = get_best_keywords(input)
-
-        # Assert
-        self.assertEqual(results, "ida now tropical")
-
-    def test_get_best_keywords__given_other_headlines__then_best_returned(self):
-        # Arrange
-        input = [
-            "Families forced to queue for hours at Heathrow border control",
-            "Canada election: Will declining consumer confidence hurt Trudeau?",
-            "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-            "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-            "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-            "Haiti Quake Turned Baptism Celebration Into Tragedy",
-            "In New Orleans and beyond, evacuations are underway.",
-            "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-            "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-            "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-            "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
-            "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
-        ]
-
-        # Act
-        results = get_best_keywords(input)
-
-        # Assert
-        self.assertEqual(results, "lake tahoe")
-
-    def test_get_best_keywords__given_tie_in_headlines__then_lowest_alpha_returned(
-        self,
-    ):
+    def test_get_lead_headlines__given_no_tie__then_highest_returned(self):
         # Arrange
         input = [
             "hurricane ida slams lousiana",
             "hurricane ida",
-            "covid surge",
             "covid surge hitting the south",
+            "covid surge",
         ]
 
         # Act
-        results = get_best_keywords(input)
+        subject = LeadHeadlines(input)
 
         # Assert
-        self.assertEqual(results, "covid surge")
-
-    def test_get_lead_headlines__given_other_headlines__then_best_returned(self):
-        # Arrange
-        input = [
-            "Families forced to queue for hours at Heathrow border control",
-            "Canada election: Will declining consumer confidence hurt Trudeau?",
-            "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-            "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-            "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-            "Haiti Quake Turned Baptism Celebration Into Tragedy",
-            "In New Orleans and beyond, evacuations are underway.",
-            "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-            "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-            "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-            "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
-            "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
-        ]
-
-        # Act
-        results = get_lead_headlines(input)
-        print(results)
-
-        # Assert
+        self.assertEqual(subject.best_keywords, "covid surge")
         self.assertEqual(
-            results,
+            subject.lead_headlines,
             [
-                "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-                "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+                "covid surge hitting the south",
+                "covid surge",
             ],
         )
+
+    # def test_get_top_gram__given_tie__then_highest_returned(self):
+    #     # Arrange
+    #     input = [
+    #         "hurricane ida slams lousiana",
+    #         "hurricane ida",
+    #         "covid surge",
+    #         "covid surge hitting the south",
+    #     ]
+
+    #     # Act
+    #     results = get_top_gram(input, 2)
+
+    #     # Assert
+    #     self.assertEqual(results, (2, "covid surge"))
+
+    # def test_ngrams__given_headline__then_ngrams_returned_without_stop_words_and_punctuation(
+    #     self,
+    # ):
+    #     # Arrange
+    #     input = "Hurricane Ida has really strong winds!"
+
+    #     # Act
+    #     results = ngrams(input, 3)
+    #     print(results)
+
+    #     # Assert
+    #     self.assertEqual(
+    #         results,
+    #         ["hurricane ida really", "ida really strong", "really strong winds"],
+    #     )
+
+    # def test_get_best_keywords__given_headlines__then_best_returned(self):
+    #     # Arrange
+    #     input = [
+    #         "Families forced to queue for hours at Heathrow border control",
+    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
+    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
+    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
+    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
+    #         "In New Orleans and beyond, evacuations are underway.",
+    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
+    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
+    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+    #         "Ida now a tropical storm",
+    #         "Ida now a tropical storm",
+    #     ]
+
+    #     # Act
+    #     results = get_best_keywords(input)
+
+    #     # Assert
+    #     self.assertEqual(results, "ida now tropical")
+
+    # def test_get_best_keywords__given_other_headlines__then_best_returned(self):
+    #     # Arrange
+    #     input = [
+    #         "Families forced to queue for hours at Heathrow border control",
+    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
+    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
+    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
+    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
+    #         "In New Orleans and beyond, evacuations are underway.",
+    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
+    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
+    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+    #         "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
+    #         "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
+    #     ]
+
+    #     # Act
+    #     results = get_best_keywords(input)
+
+    #     # Assert
+    #     self.assertEqual(results, "lake tahoe")
+
+    # def test_get_best_keywords__given_tie_in_headlines__then_lowest_alpha_returned(
+    #     self,
+    # ):
+    #     # Arrange
+    #     input = [
+    #         "hurricane ida slams lousiana",
+    #         "hurricane ida",
+    #         "covid surge",
+    #         "covid surge hitting the south",
+    #     ]
+
+    #     # Act
+    #     results = get_best_keywords(input)
+
+    #     # Assert
+    #     self.assertEqual(results, "covid surge")
+
+    # def test_get_lead_headlines__given_other_headlines__then_best_returned(self):
+    #     # Arrange
+    #     input = [
+    #         "Families forced to queue for hours at Heathrow border control",
+    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
+    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
+    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
+    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
+    #         "In New Orleans and beyond, evacuations are underway.",
+    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
+    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
+    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+    #         "At Least One Person Is Dead As Ida Leaves A Million People Without Power In Louisiana",
+    #         "Pace of US evacuation flights from Afghanistan slowing one day before Biden's deadline: officials",
+    #     ]
+
+    #     # Act
+    #     results = get_lead_headlines(input)
+    #     print(results)
+
+    #     # Assert
+    #     self.assertEqual(
+    #         results,
+    #         [
+    #             "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+    #             "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
+    #         ],
+    #     )
 
     # def test_get_lead_headlines__given_google_headlines__then_best_returned(self):
     #     # Arrange
@@ -317,19 +342,19 @@ Generated: 2020-01-01T13:04:05"""
     #         ],
     #     )
 
-    def test_get_lead_headlines_md__given_headlines__then_md_is_correct(self):
-        # Arrange
+    # def test_get_lead_headlines_md__given_headlines__then_md_is_correct(self):
+    #     # Arrange
 
-        # Act
-        results = get_lead_headlines_md(
-            datetime.now(),
-            "hurricane ida",
-            ["Hurricante Ida is really bad", "Who is impacted by Hurricane Ida."],
-        )
-        print(f"test results: {results}")
+    #     # Act
+    #     results = get_lead_headlines_md(
+    #         datetime.now(),
+    #         "hurricane ida",
+    #         ["Hurricante Ida is really bad", "Who is impacted by Hurricane Ida."],
+    #     )
+    #     print(f"test results: {results}")
 
-        # Assert
-        self.assertTrue("Lead headlines for 'hurricane ida'" in results)
+    #     # Assert
+    #     self.assertTrue("Lead headlines for 'hurricane ida'" in results)
 
 
 if __name__ == "__main__":

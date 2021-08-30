@@ -327,9 +327,9 @@ class LeadHeadlines:
         return top_gram1[1]
 
     def __get_lead_headlines(self, headlines: list):
-        self.best_keyword = self.__get_best_keywords(headlines)
-        print(f"best_keyword: {best_keyword}")
-        return [h for h in headlines if best_keyword in h.lower()]
+        self.best_keywords = self.__get_best_keywords(headlines)
+        print(f"best_keyword: {self.best_keywords}")
+        return [h for h in headlines if self.best_keywords in h.lower()]
 
 
 def main():
