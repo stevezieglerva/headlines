@@ -319,6 +319,9 @@ class LeadHeadlines:
         print(top_gram2)
         print(top_gram3)
 
+        if top_gram1[0] == 1 and top_gram2[0] == 1 and top_gram3[0] == 1:
+            return ""
+
         if top_gram3[0] >= top_gram2[0] and top_gram3[0] >= top_gram1[0]:
             print("returning 3")
             return top_gram3[1]
@@ -328,6 +331,8 @@ class LeadHeadlines:
 
     def __get_lead_headlines(self, headlines: list):
         self.best_keywords = self.__get_best_keywords(headlines)
+        if self.best_keywords == "":
+            return []
         print(f"best_keyword: {self.best_keywords}")
         return [h for h in headlines if self.best_keywords in h.lower()]
 

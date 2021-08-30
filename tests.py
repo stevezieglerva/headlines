@@ -132,7 +132,7 @@ Generated: 2020-01-01T13:04:05"""
             subject.lead_headlines, ["hurricane ida slams lousiana", "hurricane ida"]
         )
 
-    def test_get_lead_headlines__given_no_tie__then_highest_returned(self):
+    def test_get_lead_headlines__given_tie__then_earliest_in_alphabet_returned(self):
         # Arrange
         input = [
             "hurricane ida slams lousiana",
@@ -152,6 +152,41 @@ Generated: 2020-01-01T13:04:05"""
                 "covid surge hitting the south",
                 "covid surge",
             ],
+        )
+
+    def test_get_lead_headlines__given_tie_but_trigrams__then_trigrams_returned(self):
+        # Arrange
+        input = [
+            "hurricane ida slams lousiana",
+            "hurricane ida",
+            "covid surge hitting the south",
+            "covid surge",
+            "millions without power after storm",
+            "millions without power in la",
+        ]
+
+        # Act
+        subject = LeadHeadlines(input)
+
+        # Assert
+        self.assertEqual(subject.best_keywords, "millions without power")
+
+    def test_get_lead_headlines__given_all_ones__then_no_leads_returned(self):
+        # Arrange
+        input = [
+            "hurricane ida slams lousiana",
+            "covid surge hitting the south",
+            "millions without power in la",
+        ]
+
+        # Act
+        subject = LeadHeadlines(input)
+
+        # Assert
+        self.assertEqual(subject.best_keywords, "")
+        self.assertEqual(
+            subject.lead_headlines,
+            [],
         )
 
     # def test_get_top_gram__given_tie__then_highest_returned(self):
