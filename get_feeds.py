@@ -2,6 +2,7 @@ import heapq
 import json
 import re
 from datetime import datetime
+from typing import List
 
 import feedparser
 
@@ -267,20 +268,36 @@ Generated: {now}"""
 
 
 class LeadHeadlines:
-    def __init__(self, headlines: list) -> None:
+    def __init__(self, headlines: List[str]) -> None:
+        self.prep_to_raw_mapping = self.__prep_data(headlines)
         self.lead_headlines = self.__get_lead_headlines(headlines)
 
-    def __ngrams(self, input, n):
-        input_list = input.split(" ")
-        input_list_lower = [w.lower() for w in input_list]
-        input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
-        input_no_punc = [re.sub(r"[^a-zA-Z0-9 -]", " ", w) for w in input_no_stop_words]
-        input_trim = [w.strip() for w in input_no_punc]
-        input_to_process = input_trim
+    def __str__(self):
+        return f"""best_keywords: {self.best_keywords}
+lead_headlines: {self.lead_headlines}
+"""
+
+    def __ngrams(self, input, n) -> List[str]:
+        input_to_process = input.split(" ")
         output = []
         for i in range(len(input_to_process) - n + 1):
             output.append(input_to_process[i : i + n])
         return [" ".join(x) for x in output]
+
+    def __prep_data(self, raw_headlines: List[str]) -> dict:
+        prep_to_raw_mapping = {}
+        for raw_headline in raw_headlines:
+            input_list = raw_headline.split(" ")
+            input_list_lower = [w.lower() for w in input_list]
+            input_no_stop_words = [w for w in input_list_lower if w not in STOP_WORDS]
+            input_no_punc = [
+                re.sub(r"[^a-zA-Z0-9 -]", " ", w) for w in input_no_stop_words
+            ]
+            input_trim = [w.strip() for w in input_no_punc]
+            input_line = " ".join(input_trim)
+            prep_to_raw_mapping[input_line] = raw_headline
+        print(json.dumps(prep_to_raw_mapping, indent=3, default=str))
+        return prep_to_raw_mapping
 
     def __get_top_gram(self, headlines: list, gram_length: int):
         top_gram = TopX(3)
@@ -330,11 +347,16 @@ class LeadHeadlines:
         return top_gram1[1]
 
     def __get_lead_headlines(self, headlines: list):
-        self.best_keywords = self.__get_best_keywords(headlines)
+        prepped_headlines = [h for h in self.prep_to_raw_mapping.keys()]
+        self.best_keywords = self.__get_best_keywords(prepped_headlines)
         if self.best_keywords == "":
             return []
         print(f"best_keyword: {self.best_keywords}")
-        return [h for h in headlines if self.best_keywords in h.lower()]
+        return [
+            raw
+            for prepped, raw in self.prep_to_raw_mapping.items()
+            if self.best_keywords in prepped
+        ]
 
 
 def main():

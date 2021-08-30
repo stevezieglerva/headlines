@@ -6,242 +6,215 @@ from get_feeds import *
 
 
 class UnitTests(unittest.TestCase):
-    def test_convert_rss_data_to_md__given_rss_data_with_thumbnail__correct_md_text_returned(
-        self,
-    ):
-        # Arrange
-        rss_entry = {
-            "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
-            "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
-            "summary": "Nearly 30 US states are reporting downward trends in...",
-            "media_content": [
-                {
-                    "url": "https://cdn.cnn.com/cnnnext/dam/assets/200911014935-us-coronavirus-friday-0906-restricted-super-169.jpg"
-                }
-            ],
-        }
+#     def test_convert_rss_data_to_md__given_rss_data_with_thumbnail__correct_md_text_returned(
+#         self,
+#     ):
+#         # Arrange
+#         rss_entry = {
+#             "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
+#             "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
+#             "summary": "Nearly 30 US states are reporting downward trends in...",
+#             "media_content": [
+#                 {
+#                     "url": "https://cdn.cnn.com/cnnnext/dam/assets/200911014935-us-coronavirus-friday-0906-restricted-super-169.jpg"
+#                 }
+#             ],
+#         }
 
-        # Act
-        results = convert_rss_data_to_md(rss_entry, "first_headline")
+#         # Act
+#         results = convert_rss_data_to_md(rss_entry, "first_headline")
 
-        # Assert
-        expected = """---
-title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
-date: 
-thumbnail: https://cdn.cnn.com/cnnnext/dam/assets/200911014935-us-coronavirus-friday-0906-restricted-super-169.jpg
-target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
-type: first_headline
-categories:
-    - first_headline
----
-Nearly 30 US states are reporting downward trends in..."""
-        print(results)
-        self.assertEqual(results, expected)
+#         # Assert
+#         expected = """---
+# title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
+# date: 
+# thumbnail: https://cdn.cnn.com/cnnnext/dam/assets/200911014935-us-coronavirus-friday-0906-restricted-super-169.jpg
+# target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
+# type: first_headline
+# categories:
+#     - first_headline
+# ---
+# Nearly 30 US states are reporting downward trends in..."""
+#         print(results)
+#         self.assertEqual(results, expected)
 
-    def test_convert_rss_data_to_md__given_rss_data_without_thumbnail__correct_md_text_returned(
-        self,
-    ):
-        # Arrange
-        rss_entry = {
-            "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
-            "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
-            "summary": "Nearly 30 US states are reporting downward trends in...",
-        }
+#     def test_convert_rss_data_to_md__given_rss_data_without_thumbnail__correct_md_text_returned(
+#         self,
+#     ):
+#         # Arrange
+#         rss_entry = {
+#             "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
+#             "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
+#             "summary": "Nearly 30 US states are reporting downward trends in...",
+#         }
 
-        # Act
-        results = convert_rss_data_to_md(rss_entry, "first_headline")
+#         # Act
+#         results = convert_rss_data_to_md(rss_entry, "first_headline")
 
-        # Assert
-        expected = """---
-title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
-date: 
+#         # Assert
+#         expected = """---
+# title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
+# date: 
 
-target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
-type: first_headline
-categories:
-    - first_headline
----
-Nearly 30 US states are reporting downward trends in..."""
-        print(results)
-        self.assertEqual(results, expected)
+# target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
+# type: first_headline
+# categories:
+#     - first_headline
+# ---
+# Nearly 30 US states are reporting downward trends in..."""
+#         print(results)
+#         self.assertEqual(results, expected)
 
-    def test_convert_rss_data_to_md__given_rss_data_with_publish_date__correct_md_text_returned(
-        self,
-    ):
-        # Arrange
-        rss_entry = {
-            "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
-            "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
-            "summary": "Nearly 30 US states are reporting downward trends in...",
-            "published": "1/1/00",
-        }
+#     def test_convert_rss_data_to_md__given_rss_data_with_publish_date__correct_md_text_returned(
+#         self,
+#     ):
+#         # Arrange
+#         rss_entry = {
+#             "title": "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why.",
+#             "link": "http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html",
+#             "summary": "Nearly 30 US states are reporting downward trends in...",
+#             "published": "1/1/00",
+#         }
 
-        # Act
-        results = convert_rss_data_to_md(rss_entry, "first_headline")
+#         # Act
+#         results = convert_rss_data_to_md(rss_entry, "first_headline")
 
-        # Assert
-        expected = """---
-title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
-date: 1/1/00
+#         # Assert
+#         expected = """---
+# title: "The warning isn't new. Experts have long cautioned the months ahead will be challenging. Here's why."
+# date: 1/1/00
 
-target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
-type: first_headline
-categories:
-    - first_headline
----
-Nearly 30 US states are reporting downward trends in..."""
-        print(results)
-        self.assertEqual(results, expected)
+# target_link: http://rss.cnn.com/~r/rss/cnn_topstories/~3/b-gJezqWSTM/index.html
+# type: first_headline
+# categories:
+#     - first_headline
+# ---
+# Nearly 30 US states are reporting downward trends in..."""
+#         print(results)
+#         self.assertEqual(results, expected)
 
-    def test_get_about_md__given_normal_use__then_about_md_returned(self):
-        # Arrange
-        now = datetime(2020, 1, 1, 13, 4, 5)
+#     def test_get_about_md__given_normal_use__then_about_md_returned(self):
+#         # Arrange
+#         now = datetime(2020, 1, 1, 13, 4, 5)
 
-        # Act
-        results = get_about_file_md(now)
-        print(results)
+#         # Act
+#         results = get_about_file_md(now)
+#         print(results)
 
-        # Assert
-        expected = """---
-title: "About"
-date: 2020-01-01T13:04:05
-draft: false
----
-## Collection of top headlines for news site RSS feeds.
+#         # Assert
+#         expected = """---
+# title: "About"
+# date: 2020-01-01T13:04:05
+# draft: false
+# ---
+# ## Collection of top headlines for news site RSS feeds.
 
-This site is auto-generated from a mixed collection of RSS feeds from different newsites to provide a mixture of view points. 
-It grabs the [first](/first_headline) and [second](/second_headline) RSS entry from each feed. It also grabs some headlines from more [fringe](/fringe) websites.
+# This site is auto-generated from a mixed collection of RSS feeds from different newsites to provide a mixture of view points. 
+# It grabs the [first](/first_headline) and [second](/second_headline) RSS entry from each feed. It also grabs some headlines from more [fringe](/fringe) websites.
 
-Generated: 2020-01-01T13:04:05"""
-        self.assertEqual(results, expected)
+# Generated: 2020-01-01T13:04:05"""
+#         self.assertEqual(results, expected)
 
-    def test_get_lead_headlines__given_no_tie__then_highest_returned(self):
+#     def test_get_lead_headlines__given_no_tie__then_highest_returned(self):
+#         # Arrange
+#         input = [
+#             "hurricane ida slams lousiana",
+#             "hurricane ida",
+#             "covid surge hitting the south",
+#         ]
+
+#         # Act
+#         subject = LeadHeadlines(input)
+
+#         # Assert
+#         self.assertEqual(subject.best_keywords, "hurricane ida")
+#         self.assertEqual(
+#             subject.lead_headlines, ["hurricane ida slams lousiana", "hurricane ida"]
+#         )
+
+#     def test_get_lead_headlines__given_tie__then_earliest_in_alphabet_returned(self):
+#         # Arrange
+#         input = [
+#             "hurricane ida slams lousiana",
+#             "hurricane ida",
+#             "covid surge hitting the south",
+#             "covid surge",
+#         ]
+
+#         # Act
+#         subject = LeadHeadlines(input)
+
+#         # Assert
+#         self.assertEqual(subject.best_keywords, "covid surge")
+#         self.assertEqual(
+#             subject.lead_headlines,
+#             [
+#                 "covid surge hitting the south",
+#                 "covid surge",
+#             ],
+#         )
+
+#     def test_get_lead_headlines__given_tie_but_trigrams__then_trigrams_returned(self):
+#         # Arrange
+#         input = [
+#             "hurricane ida slams lousiana",
+#             "hurricane ida",
+#             "covid surge hitting the south",
+#             "covid surge",
+#             "millions without power after storm",
+#             "millions without power in la",
+#         ]
+
+#         # Act
+#         subject = LeadHeadlines(input)
+
+#         # Assert
+#         self.assertEqual(subject.best_keywords, "millions without power")
+
+#     def test_get_lead_headlines__given_all_ones__then_no_leads_returned(self):
+#         # Arrange
+#         input = [
+#             "hurricane ida slams lousiana",
+#             "covid surge hitting the south",
+#             "millions without power in la",
+#         ]
+
+#         # Act
+#         subject = LeadHeadlines(input)
+
+#         # Assert
+#         self.assertEqual(subject.best_keywords, "")
+#         self.assertEqual(
+#             subject.lead_headlines,
+#             [],
+#         )
+
+    def test_get_best_keywords__given_headlines__then_best_returned(self):
         # Arrange
         input = [
-            "hurricane ida slams lousiana",
-            "hurricane ida",
-            "covid surge hitting the south",
+            "Families forced to queue for hours at Heathrow border control",
+            "Canada election: Will declining consumer confidence hurt Trudeau?",
+            "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
+            "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
+            "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
+            "Haiti Quake Turned Baptism Celebration Into Tragedy",
+            "In New Orleans and beyond, evacuations are underway.",
+            "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
+            "Authorities conduct search-and-rescue efforts in hurricane aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
+            "Raging California wildfire threatens Lake Tahoe, prompts evacuations", 
+            "Millions lost power to Ida the now tropical."
         ]
 
         # Act
         subject = LeadHeadlines(input)
+        print(subject)
 
         # Assert
-        self.assertEqual(subject.best_keywords, "hurricane ida")
-        self.assertEqual(
-            subject.lead_headlines, ["hurricane ida slams lousiana", "hurricane ida"]
-        )
-
-    def test_get_lead_headlines__given_tie__then_earliest_in_alphabet_returned(self):
-        # Arrange
-        input = [
-            "hurricane ida slams lousiana",
-            "hurricane ida",
-            "covid surge hitting the south",
-            "covid surge",
-        ]
-
-        # Act
-        subject = LeadHeadlines(input)
-
-        # Assert
-        self.assertEqual(subject.best_keywords, "covid surge")
+        self.assertEqual(subject.best_keywords, "ida now tropical")
         self.assertEqual(
             subject.lead_headlines,
-            [
-                "covid surge hitting the south",
-                "covid surge",
-            ],
+            ['Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power', 'Millions lost power to Ida the now tropical.'],
         )
-
-    def test_get_lead_headlines__given_tie_but_trigrams__then_trigrams_returned(self):
-        # Arrange
-        input = [
-            "hurricane ida slams lousiana",
-            "hurricane ida",
-            "covid surge hitting the south",
-            "covid surge",
-            "millions without power after storm",
-            "millions without power in la",
-        ]
-
-        # Act
-        subject = LeadHeadlines(input)
-
-        # Assert
-        self.assertEqual(subject.best_keywords, "millions without power")
-
-    def test_get_lead_headlines__given_all_ones__then_no_leads_returned(self):
-        # Arrange
-        input = [
-            "hurricane ida slams lousiana",
-            "covid surge hitting the south",
-            "millions without power in la",
-        ]
-
-        # Act
-        subject = LeadHeadlines(input)
-
-        # Assert
-        self.assertEqual(subject.best_keywords, "")
-        self.assertEqual(
-            subject.lead_headlines,
-            [],
-        )
-
-    # def test_get_top_gram__given_tie__then_highest_returned(self):
-    #     # Arrange
-    #     input = [
-    #         "hurricane ida slams lousiana",
-    #         "hurricane ida",
-    #         "covid surge",
-    #         "covid surge hitting the south",
-    #     ]
-
-    #     # Act
-    #     results = get_top_gram(input, 2)
-
-    #     # Assert
-    #     self.assertEqual(results, (2, "covid surge"))
-
-    # def test_ngrams__given_headline__then_ngrams_returned_without_stop_words_and_punctuation(
-    #     self,
-    # ):
-    #     # Arrange
-    #     input = "Hurricane Ida has really strong winds!"
-
-    #     # Act
-    #     results = ngrams(input, 3)
-    #     print(results)
-
-    #     # Assert
-    #     self.assertEqual(
-    #         results,
-    #         ["hurricane ida really", "ida really strong", "really strong winds"],
-    #     )
-
-    # def test_get_best_keywords__given_headlines__then_best_returned(self):
-    #     # Arrange
-    #     input = [
-    #         "Families forced to queue for hours at Heathrow border control",
-    #         "Canada election: Will declining consumer confidence hurt Trudeau?",
-    #         "Texas ‘freedom defender’ who rallied against COVID-19 measures dies",
-    #         "Ida now a tropical storm as more than 1 million Louisiana utility customers are left without power",
-    #         "As The Lake Tahoe Wildfire Spreads, Everyone On The California Side Is Told To Leave",
-    #         "Haiti Quake Turned Baptism Celebration Into Tragedy",
-    #         "In New Orleans and beyond, evacuations are underway.",
-    #         "Live: 'Covid's C.1.2 variant may be more infectious, evade vaccine protection'",
-    #         "Authorities conduct search-and-rescue efforts in Ida's aftermath. 'The worst-case scenario seems to have happened' in Jefferson Parish, an official says.",
-    #         "Raging California wildfire threatens Lake Tahoe, prompts evacuations",
-    #         "Ida now a tropical storm",
-    #         "Ida now a tropical storm",
-    #     ]
-
-    #     # Act
-    #     results = get_best_keywords(input)
-
-    #     # Assert
-    #     self.assertEqual(results, "ida now tropical")
 
     # def test_get_best_keywords__given_other_headlines__then_best_returned(self):
     #     # Arrange
