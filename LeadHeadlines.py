@@ -213,6 +213,9 @@ REPLACEMENT_WORDS = {
     '"': "",
     "Year's": "Years",
     "Political cartoon of the day": "",
+    "White House": "",
+    "Today's mortgage refinance": "",
+    "Social media": "",
 }
 
 
@@ -241,7 +244,9 @@ class TopX:
 
 
 class LeadHeadlines:
-    def __init__(self, headlines: List[str]) -> None:
+    def __init__(
+        self, headlines: List[str], percentage_threshold: float = 0.01
+    ) -> None:
         self.prep_to_raw_mapping = self.__prep_data(headlines)
         prepped_headlines = [h for h in self.prep_to_raw_mapping.keys()]
 
@@ -280,25 +285,35 @@ class LeadHeadlines:
         grams.extend(self.gram3_sorted)
         self.grams_sorted = sorted(grams, reverse=True)
         best_frequency = GramFrequency.create_from_tuple(self.grams_sorted[0])
-        self.best_keywords = best_frequency.gram
-        self.headline_percentage = best_frequency.frequency
-
-        self.lead_headlines = self.__get_lead_headlines(self.best_keywords)
+        self.best_keywords = ""
+        self.lead_headlines = []
+        self.headline_percentage = 0
+        if best_frequency.frequency > percentage_threshold:
+            self.best_keywords = best_frequency.gram
+            self.headline_percentage = best_frequency.frequency
+            self.lead_headlines = self.__get_lead_headlines(self.best_keywords)
 
     def __get_percentage_of_headlines_with_gram(self, prepped_headlines, gram):
-        print(f"\ngram: {gram}")
+        # print(f"\ngram: '{gram}'")
         headlines_with_gram = [h for h in prepped_headlines if gram in h]
         headlines_with_gram = {}
 
         words = gram.split(" ")
         for headline in prepped_headlines:
-            for word in words:
-                if word in headline:
-                    headlines_with_gram[headline] = (
-                        headlines_with_gram.get(headline, 0) + 1
-                    )
-                    print(f"\tfound {word} in {headline}")
-                    break
+            if gram in headline:
+                headlines_with_gram[headline] = headlines_with_gram.get(headline, 0) + 1
+                # print(f"\tfound '{gram}'' in '{headline}'")
+            else:
+                words = gram.split(" ")
+                if len(words) == 3:
+                    left = " ".join(words[0:2])
+                    right = " ".join(words[1:3])
+                    if left in headline or right in headline:
+                        headlines_with_gram[headline] = (
+                            headlines_with_gram.get(headline, 0) + 1
+                        )
+                        # print(f"\tfound partial '{gram}'' in '{headline}'")
+
         found_count = len(headlines_with_gram.keys())
         total_count = len(prepped_headlines)
         # print(f"\t\t{found_count} / {total_count}")
@@ -311,7 +326,7 @@ class LeadHeadlines:
     def __repr__(self):
         return f"""best_keywords: {self.best_keywords} ({self.headline_percentage:.0%})
 
-lead_headlines: {self.lead_headlines}
+lead_headlines: {self.lead_headlines[0:3]} ...
 headline count: {len(self.prep_to_raw_mapping)}
 
 top 1-grams: {self.gram1_sorted}

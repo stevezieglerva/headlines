@@ -1,2 +1,9 @@
 feedparser
 coverage
+requests
+wayback
+feedparser
+bs4
+requests
+retry
+python-dateutil

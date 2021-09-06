@@ -8,6 +8,7 @@ from typing import List
 
 import feedparser
 
+from HeadlineRetriever import *
 from LeadHeadlines import LeadHeadlines
 
 
@@ -31,7 +32,7 @@ def convert_rss_data_to_md(rss_entry, content_type):
     published = rss_entry.get("published", "")
     image_url_front = get_thumbnail_url(rss_entry)
     summary = rss_entry["summary"]
-    print(f"\n\n{title}")
+    print(f"{title}")
     template = f"""---
 title: "{title}"
 date: {published}
@@ -61,12 +62,20 @@ Generated: {now}"""
     return about
 
 
-def get_lead_headlines_md(tmsp_datetime: datetime, leads: LeadHeadlines):
+def get_lead_headlines_md(
+    tmsp_datetime: datetime, leads: LeadHeadlines, headline_records: List[Headline]
+):
     topic = leads.best_keywords
     lead_headlines = leads.lead_headlines
     now = tmsp_datetime.isoformat()
-    headlines_list = [f"* {h}" for h in lead_headlines]
-    headlines_str = "\n".join(headlines_list)
+    headlines_str = ""
+    for lead_headline in leads.lead_headlines:
+        print(f"lead_headlines: {lead_headline}")
+        urls = [h.url for h in headline_records if h.headline == lead_headline]
+        url = urls[0]
+        print(f"\turl: {url}")
+        headlines_str += f"* [{lead_headline}]({url})\n"
+
     md = f"""---
 title: "Lead Headlines"
 date: {now}
@@ -139,10 +148,13 @@ def main():
             with open(f"headlines_site/content/fringe/{now}_{count}.md", "w") as file:
                 file.write(md)
 
-    leads = LeadHeadlines(all_headlines)
+    retriever = HeadlineRetriever()
+    headlines = retriever.get_headlines()
+    titles = [h.headline for h in headlines]
+    leads = LeadHeadlines(titles)
     print(repr(leads))
     print(f"\nLead headlines: {leads.lead_headlines}")
-    lead_headline_md = get_lead_headlines_md(datetime.now(), leads)
+    lead_headline_md = get_lead_headlines_md(datetime.now(), leads, headlines)
     with open(f"headlines_site/content/lead_headlines.md", "w") as file:
         file.write(lead_headline_md)
 
