@@ -65,29 +65,43 @@ Generated: {now}"""
 def get_lead_headlines_md(
     tmsp_datetime: datetime, leads: LeadHeadlines, headline_records: List[Headline]
 ):
-    topic = leads.best_keywords
-    lead_headlines = leads.lead_headlines
     now = tmsp_datetime.isoformat()
+    topic = leads.best_keywords
     headlines_str = ""
-    for lead_headline in leads.lead_headlines:
-        print(f"lead_headlines: {lead_headline}")
-        urls = [h.url for h in headline_records if h.headline == lead_headline]
-        url = urls[0]
-        print(f"\turl: {url}")
-        headlines_str += f"* [{lead_headline}]({url})\n"
+    if topic != "":
+        for lead_headline in leads.lead_headlines:
+            print(f"lead_headlines: {lead_headline}")
+            urls = [h.url for h in headline_records if h.headline == lead_headline]
+            url = urls[0]
+            print(f"\turl: {url}")
+            headlines_str += f"* [{lead_headline}]({url})\n"
+        md = f"""---
+    title: "Lead Headlines"
+    date: {now}
+    draft: false
+    ---
+    ## Lead headlines for '{topic}':
+    {headlines_str}
 
-    md = f"""---
-title: "Lead Headlines"
-date: {now}
-draft: false
----
-## Lead headlines for '{topic}':
-{headlines_str}
+
+
+    Generated: {now}"""
+        return md
+    else:
+        top_grams = [f"'{g[1]}'" for g in leads.grams_sorted[0:3]]
+        top_grams_str = ", ".join(top_grams)
+        md = f"""---
+    title: "Lead Headlines"
+    date: {now}
+    draft: false
+    ---
+    ## No standout lead headlines at this time.
+    While there are some headline groupings ({top_grams_str}), there is no standout lead story right now.
 
 
 
-Generated: {now}"""
-    return md
+    Generated: {now}"""
+        return md
 
 
 def main():
