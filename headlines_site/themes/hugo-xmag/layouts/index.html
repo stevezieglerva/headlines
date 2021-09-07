@@ -2,8 +2,8 @@
 
 <div class="container">
     <main class="list">
-
-
+        {{ partial "lead_headlines.html" . }}
+ 
         {{ range where .Site.RegularPages "Type" "first_headline"  }}
 
 
