@@ -76,31 +76,31 @@ def get_lead_headlines_md(
             print(f"\turl: {url}")
             headlines_str += f"* [{lead_headline}]({url})\n"
         md = f"""---
-    title: "Lead Headlines"
-    date: {now}
-    draft: false
-    ---
-    ## Lead headlines for '{topic}':
-    {headlines_str}
+title: "Lead Headlines"
+date: {now}
+draft: false
+---
+## Lead headlines for '{topic}':
+{headlines_str}
 
 
 
-    Generated: {now}"""
+Generated: {now}"""
         return md
     else:
         top_grams = [f"'{g[1]}'" for g in leads.grams_sorted[0:3]]
         top_grams_str = ", ".join(top_grams)
         md = f"""---
-    title: "Lead Headlines"
-    date: {now}
-    draft: false
-    ---
-    ## No standout lead headlines at this time.
-    While there are some headline groupings ({top_grams_str}), there is no standout lead story right now.
+title: "Lead Headlines"
+date: {now}
+draft: false
+---
+## No standout lead headlines at this time.
+While there are some headline groupings ({top_grams_str}), there is no standout lead story right now.
 
 
 
-    Generated: {now}"""
+Generated: {now}"""
         return md
 
 
