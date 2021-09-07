@@ -72,9 +72,10 @@ def get_lead_headlines_md(
         for lead_headline in leads.lead_headlines:
             print(f"lead_headlines: {lead_headline}")
             urls = [h.url for h in headline_records if h.headline == lead_headline]
-            url = urls[0]
-            print(f"\turl: {url}")
-            headlines_str += f"* [{lead_headline}]({url})\n"
+            if len(urls) > 0:
+                url = urls[0]
+                print(f"\turl: {url}")
+                headlines_str += f"* [{lead_headline}]({url})\n"
         md = f"""---
 title: "Lead Headlines"
 date: {now}
@@ -102,6 +103,34 @@ While there are some headline groupings ({top_grams_str}), there is no standout 
 
 Generated: {now}"""
         return md
+
+
+def get_lead_headlines_partial(
+    tmsp_datetime: datetime, leads: LeadHeadlines, headline_records: List[Headline]
+):
+    print(json.dumps(headline_records, indent=3, default=str))
+    now = tmsp_datetime.isoformat()
+    topic = leads.best_keywords
+    headlines_str = ""
+    if topic != "":
+        for lead_headline in leads.lead_headlines[0:4]:
+            print(f"lead_headlines: {lead_headline}")
+            urls = [h.url for h in headline_records if h.headline == lead_headline]
+            if len(urls) > 0:
+                url = urls[0]
+                print(f"\turl: {url}")
+                headlines_str += f"<li><a href='{url}'>{lead_headline}</a></li>\n"
+        html = f"""<div style="width:100%; background-color: white;"> 
+<h1>Lead Headline Topic: '{topic}' ({leads.headline_percentage:.0%})</h1>
+<ul>
+{headlines_str} <br/> 
+</ul>     
+</div>
+
+"""
+        return html
+
+    return ""
 
 
 def main():
@@ -164,13 +193,19 @@ def main():
 
     retriever = HeadlineRetriever()
     headlines = retriever.get_headlines()
+
     titles = [h.headline for h in headlines]
-    leads = LeadHeadlines(titles)
+    leads = LeadHeadlines(titles, 0.3)
     print(repr(leads))
     print(f"\nLead headlines: {leads.lead_headlines}")
     lead_headline_md = get_lead_headlines_md(datetime.now(), leads, headlines)
     with open(f"headlines_site/content/lead_headlines.md", "w") as file:
         file.write(lead_headline_md)
+    lead_headline_partial_html = get_lead_headlines_partial(
+        datetime.now(), leads, headlines
+    )
+    with open(f"headlines_site/layouts/partials/lead_headlines.html", "w") as file:
+        file.write(lead_headline_partial_html)
 
 
 if __name__ == "__main__":
