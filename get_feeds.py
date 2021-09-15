@@ -108,19 +108,29 @@ Generated: {now}"""
 def get_lead_headlines_partial(
     tmsp_datetime: datetime, leads: LeadHeadlines, headline_records: List[Headline]
 ):
-    print(json.dumps(headline_records, indent=3, default=str))
     now = tmsp_datetime.isoformat()
     topic = leads.best_keywords
     headlines_str = ""
-    if topic != "":
+    if topic == "":
+        top_grams = [f"'{g[1]}'" for g in leads.grams_sorted[0:3]]
+        top_grams_str = ", ".join(top_grams)
+
+        html = html = f"""<div style="width:100%; background-color: white; box-sizing: border-box; box-shadow: 0 0 8px #ccc; margin: 1em 0 0 15px; padding: 1em;"> 
+<h1>No standout lead headlines at this time.</h1>
+While there are some headline groupings ({top_grams_str}), there is no standout lead story right now.
+</div>
+
+"""
+
+        return html
+    else:
         for lead_headline in leads.lead_headlines[0:4]:
             print(f"lead_headlines: {lead_headline}")
             urls = [h.url for h in headline_records if h.headline == lead_headline]
             if len(urls) > 0:
                 url = urls[0]
-                print(f"\turl: {url}")
                 headlines_str += f"<li><a href='{url}'>{lead_headline}</a></li>\n"
-        html = f"""<div style="width:100%; background-color: white;"> 
+        html = f"""<div style="width:100%; background-color: white; box-sizing: border-box; box-shadow: 0 0 8px #ccc; margin: 1em 0 0 15px; padding: 1em;"> 
 <h1>Lead Headline Topic: '{topic}' ({leads.headline_percentage:.0%})</h1>
 <ul>
 {headlines_str} <br/> 
@@ -129,8 +139,6 @@ def get_lead_headlines_partial(
 
 """
         return html
-
-    return ""
 
 
 def main():
@@ -195,7 +203,7 @@ def main():
     headlines = retriever.get_headlines()
 
     titles = [h.headline for h in headlines]
-    leads = LeadHeadlines(titles, 0.3)
+    leads = LeadHeadlines(titles, 0.025)
     print(repr(leads))
     print(f"\nLead headlines: {leads.lead_headlines}")
     lead_headline_md = get_lead_headlines_md(datetime.now(), leads, headlines)
